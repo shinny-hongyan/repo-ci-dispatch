@@ -1,4 +1,4 @@
-name: Trigger Workflow and Wait
+name: run_linux
 
 on:
   push:
@@ -35,6 +35,10 @@ jobs:
 
     - name: exec shell
       run: |
-        echo ${{ toJson(github) }}
         pwd
         ls -lrt
+
+    - name: Dump GitHub context
+            env:
+              GITHUB_CONTEXT: ${{ toJson(github) }}
+            run: echo "$GITHUB_CONTEXT"
