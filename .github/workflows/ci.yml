@@ -1,7 +1,8 @@
 name: run_linux
 
-on: [workflow_dispatch]
-
+on:
+  repository_dispatch:
+    types: [exec-ci-*]
 
 jobs:
   test:
