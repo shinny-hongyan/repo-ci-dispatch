@@ -15,11 +15,7 @@ jobs:
           - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
 
     env:
-        PYTHONIOENCODING: "utf-8"
-        PYTHONHASHSEED: 32
-        TZ: ${{ matrix.envinfo.TZ }}
-        TESTLOGPATH: "./log_archive/"
-        TESTLOGNAME: ${{ matrix.envinfo.name }}
+        GITHUB_WORKFLOW: ${{ matrix.envinfo.name }}
 
     runs-on: ${{ matrix.envinfo.os }}
 
@@ -29,7 +25,6 @@ jobs:
         pwd
         ls -lrt
         echo "${GITHUB_WORKFLOW}"
-        echo "::set-env name=GITHUB_WORKFLOW::$(echo ${{ matrix.envinfo.os }})/"
 
     - name: Checkout
       uses: actions/checkout@v2
