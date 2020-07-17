@@ -1,6 +1,9 @@
 name: run_linux
 
 on:
+  push:
+    branches:
+      - '*'
   repository_dispatch:
     types: [exec-ci]
 
@@ -21,6 +24,12 @@ jobs:
     runs-on: ${{ matrix.envinfo.os }}
 
     steps:
+      - name: exec shell
+      run: |
+        pwd
+        ls -lrt
+        echo "${GITHUB_WORKFLOW}"
+
     - name: Checkout
       uses: actions/checkout@v2
       with:
