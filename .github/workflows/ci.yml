@@ -1,6 +1,8 @@
 name: run_linux
 
-on: [workflow_dispatch]
+on:
+  repository_dispatch:
+    types: [exec-ci]
 
 jobs:
   test:
@@ -29,6 +31,7 @@ jobs:
       run: |
         pwd
         ls -lrt
+        echo ${{ github.event.client_payload.ref }}
 
     - name: Dump GitHub context
       env:
