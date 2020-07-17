@@ -1,11 +1,8 @@
 name: run_win
 
 on:
-  push:
-    branches:
-      - '*'
   repository_dispatch:
-    types: [exec-ci]
+    types: [ci-win-*]
 
 jobs:
   test:
