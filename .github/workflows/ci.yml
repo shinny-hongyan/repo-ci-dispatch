@@ -1,11 +1,7 @@
 name: run_linux
 
-on:
-  push:
-    branches:
-      - '*'
-  repository_dispatch:
-    types: [exec-ci]
+on: [workflow_dispatch]
+
 
 jobs:
   test:
