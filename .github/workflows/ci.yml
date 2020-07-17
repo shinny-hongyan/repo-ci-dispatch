@@ -29,6 +29,7 @@ jobs:
         pwd
         ls -lrt
         echo "${GITHUB_WORKFLOW}"
+        echo "::set-env name=GITHUB_WORKFLOW::$(echo ${{ matrix.envinfo.os }})/"
 
     - name: Checkout
       uses: actions/checkout@v2
