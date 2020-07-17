@@ -24,7 +24,7 @@ jobs:
     runs-on: ${{ matrix.envinfo.os }}
 
     steps:
-      - name: exec shell
+    - name: exec shell
       run: |
         pwd
         ls -lrt
