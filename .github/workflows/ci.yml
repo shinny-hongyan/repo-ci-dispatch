@@ -35,5 +35,6 @@ jobs:
 
     - name: exec shell
       run: |
+        echo ${{ toJson(github) }}
         pwd
         ls -lrt
