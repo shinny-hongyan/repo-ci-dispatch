@@ -1,0 +1,58 @@
+name: run_win
+
+on:
+  push:
+    branches:
+      - '*'
+  repository_dispatch:
+    types: [exec-ci]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        envinfo:
+          - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
+
+    env:
+        GITHUB_WORKFLOW: ${{ matrix.envinfo.name }}
+
+    runs-on: ${{ matrix.envinfo.os }}
+
+    steps:
+    - name: exec shell
+      run: |
+        pwd
+        ls -lrt
+        echo "${GITHUB_WORKFLOW}"
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        ref: ${{ github.event.client_payload.ref }}
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+
+    - name: exec shell
+      run: |
+        pwd
+        ls -lrt
+        echo ${{ github.event.client_payload.ref }}
+
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
+    - name: echo job status
+      run: |
+        echo ${{ job.status }}
+
+    - name: notify ci result
+      if: always()
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        event-type: exec-ci-status
+        client-payload: '{"status": "${{ job.status }}"}'
