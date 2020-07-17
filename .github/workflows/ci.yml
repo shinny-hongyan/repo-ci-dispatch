@@ -30,7 +30,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        repository: 'https://github.com/shinny-hongyan/repo-ci-dispatch-private.git'
+        repository: "https://github.com/shinny-hongyan/repo-ci-dispatch-private.git"
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
 
     - name: exec shell
