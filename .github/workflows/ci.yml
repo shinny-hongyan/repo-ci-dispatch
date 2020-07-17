@@ -38,3 +38,16 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
+
+    - name: echo job status
+      run: |
+        echo ${{ job.status }}
+
+    - name: notify ci result
+      if: always()
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        event-type: exec-ci-status
+        client-payload: '{"status": "${{ job.status }}"}'
