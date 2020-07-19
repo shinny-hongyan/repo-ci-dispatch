@@ -45,12 +45,6 @@ jobs:
       run: |
         echo ${{ job.status }}
 
-    - name: echo job status 1
-      if: ${{ always() }} and ${{ github.event.client_payload.pr }}
-      run: |
-        echo ${{ github.event.client_payload.pr }}
-        exit 1
-
     - name: Create commit comment
       if: ${{ success() }} and ${{ github.event.client_payload.pr }}
       uses: peter-evans/commit-comment@v1
@@ -58,5 +52,5 @@ jobs:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
         sha: ${{ github.event.client_payload.pr }}
-        body: ${{ github.event.client_payload.title }} run ci success on linux platform
+        body: ${{ github.event.client_payload.title }} run ci success on win platform
         position: 1
