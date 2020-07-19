@@ -46,15 +46,6 @@ jobs:
         echo ${{ job.status }}
         exit 1
 
-    - name: notify ci result
-      if: always()
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        event-type: exec-ci-status
-        client-payload: '{"status": "${{ job.status }}"}'
-
     - name: Create commit comment
       if: ${{ failure() }}
       uses: peter-evans/commit-comment@v1
