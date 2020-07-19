@@ -44,6 +44,7 @@ jobs:
     - name: echo job status
       run: |
         echo ${{ job.status }}
+        exit 1
 
     - name: notify ci result
       if: always()
@@ -53,3 +54,18 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch-private
         event-type: exec-ci-status
         client-payload: '{"status": "${{ job.status }}"}'
+
+    - name: Create commit comment
+      if: ${{ failure() }}
+      uses: peter-evans/commit-comment@v1
+      with:
+        sha: ${{ github.event.client_payload.sha }}
+        body: |
+          This is a multi-line test comment
+          - With GitHub **Markdown** :sparkles:
+          - the job failed on linux platform
+          - Created by [commit-comment][1]
+
+          [1]: https://github.com/peter-evans/commit-comment
+        path: path/to/file.txt
+        position: 1
