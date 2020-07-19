@@ -45,11 +45,18 @@ jobs:
       run: |
         echo ${{ job.status }}
 
-    - name: notify ci result
-      if: always()
-      uses: peter-evans/repository-dispatch@v1
+    - name: echo job status 1
+      if: ${{ always() }} and ${{ github.event.client_payload.pr }}
+      run: |
+        echo ${{ github.event.client_payload.pr }}
+        exit 1
+
+    - name: Create commit comment
+      if: ${{ failure() }} and ${{ github.event.client_payload.pr }}
+      uses: peter-evans/commit-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
-        event-type: exec-ci-status
-        client-payload: '{"status": "${{ job.status }}"}'
+        sha: ${{ github.event.client_payload.pr }}
+        body: ${{ github.event.client_payload.title }} run ci failed on linux platform
+        position: 1
