@@ -50,6 +50,7 @@ jobs:
       if: ${{ failure() }}
       uses: peter-evans/commit-comment@v1
       with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
         sha: ${{ github.event.client_payload.sha }}
         body: |
           This is a multi-line test comment
@@ -58,5 +59,4 @@ jobs:
           - Created by [commit-comment][1]
 
           [1]: https://github.com/peter-evans/commit-comment
-        path: path/to/file.txt
         position: 1
