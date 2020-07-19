@@ -46,19 +46,19 @@ jobs:
         echo ${{ job.status }}
         exit 1
 
-    - name: echo job status
-      if: ${{ github.event.pull_request.head.sha }}
+    - name: echo job status 1
+      if: ${{ github.event.client_payload.pr }}
       run: |
-        echo ${{ job.status }}
-        echo ${{ github.event.pull_request.head.sha }}
+        echo ${{ github.event.client_payload.pr }}
+        exit 1
 
     - name: Create commit comment
-      if: ${{ failure() }} and ${{ github.event.pull_request.head.sha }}
+      if: ${{ failure() }} and ${{ github.event.client_payload.pr }}
       uses: peter-evans/commit-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
-        sha: ${{ github.event.pull_request.head.sha }}
+        sha: ${{ github.event.client_payload.pr }}
         body: |
           This is a multi-line test comment
           - With GitHub **Markdown** :sparkles:
