@@ -51,6 +51,7 @@ jobs:
       uses: peter-evans/commit-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
         sha: ${{ github.event.client_payload.sha }}
         body: |
           This is a multi-line test comment
