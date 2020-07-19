@@ -47,7 +47,7 @@ jobs:
         exit 1
 
     - name: echo job status 1
-      if: ${{ github.event.client_payload.pr }}
+      if: ${{ failure() }} and ${{ github.event.client_payload.pr }}
       run: |
         echo ${{ github.event.client_payload.pr }}
         exit 1
