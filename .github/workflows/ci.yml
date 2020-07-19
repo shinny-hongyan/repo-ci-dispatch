@@ -47,7 +47,7 @@ jobs:
         exit 1
 
     - name: Create commit comment
-      if: ${{ success() }} and ${{ github.event.client_payload.pr }}
+      if: success() and ${{ github.event.client_payload.pr }}
       uses: peter-evans/commit-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
