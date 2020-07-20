@@ -44,7 +44,7 @@ jobs:
     - name: echo job status
       run: |
         echo ${{ github.event.client_payload.pr_flag }}
-        echo ${{ ${{ github.event.client_payload }} }}
+        echo ${{ github.event.client_payload }}
 
     - name: Find Comment
       if: always() and ${{ github.event.client_payload.pr_flag }}
