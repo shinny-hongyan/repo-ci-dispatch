@@ -8,18 +8,9 @@ jobs:
   test:
     strategy:
       matrix:
-        envinfo:
-          - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
-        external_ci: ['ci-linux', 'ci-win']
+        ci_env: ['ci-linux', 'ci-win']
 
-    env:
-        PYTHONIOENCODING: "utf-8"
-        PYTHONHASHSEED: 32
-        TZ: ${{ matrix.envinfo.TZ }}
-        TESTLOGPATH: "./log_archive/"
-        TESTLOGNAME: ${{ matrix.envinfo.name }}
-
-    runs-on: ${{ matrix.envinfo.os }}
+    runs-on: ubuntu-latest
 
     steps:
     - name: Dump GitHub context
@@ -27,26 +18,18 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
 
-    - name: Format ci title
-      run: |
-        echo "::set-env name=COMMIT_MSG::$(echo ${{ github.event.head_commit.message }} | head -n 1 )"
-
-    - name: Format ci pr title 
-      if: github.event_name == 'pull_request'
-      run: |
-        echo "::set-env name=COMMIT_MSG::#${{ github.event.pull_request.number }}-${{ github.event.pull_request.title }}"
-        echo "::set-env name=PR_FLAG::true"
-
     - name: Invoke workflow
       uses: peter-evans/repository-dispatch@v1 
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch
-        event-type: ${{ matrix.external_ci }}-${{ env.COMMIT_MSG }}
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "title": "${{ env.COMMIT_MSG }}", 
-        "pr_flag": "${{ env.PR_FLAG }}", 
-        "pr": "${{ github.event.pull_request.head.sha }}", 
-        "pr_number": "${{ github.event.pull_request.number }}" }'
+        event-type: ${{ matrix.ci_env }}-${{ github.event.client_payload.title }}
+        client-payload: '{"ref": "${{ github.event.client_payload.ref }}", 
+        "sha": "${{ github.event.client_payload.sha }}", 
+        "title": "${{ github.event.client_payload.title }}", 
+        "pr_flag": "${{ github.event.client_payload.pr_flag }}", 
+        "pr": "${{ github.event.client_payload.pr }}", 
+        "pr_number": "${{ github.event.client_payload.pr_number }}" }'
 
 
   summary:
