@@ -44,7 +44,7 @@ jobs:
     - name: echo job status
       run: |
         echo ${{ github.event.client_payload.pr_flag }}
-        echo ${{ github.event.client_payload }}
+        echo ${{ github.event.client_payload.pr_number }}
 
     - name: Find Comment
       if: always() and ${{ github.event.client_payload.pr_flag }}
@@ -54,7 +54,7 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch-private
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: ${{ github.event.client_payload.pr_number }}
-        body-includes:  'This is the ci result'
+        body-includes:  'ci-result'
 
     - name: echo
       if: always() 
