@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         envinfo:
-          - { name: 'linux-3.6-x64', os: windows-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
+          - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
 
     env:
         GITHUB_WORKFLOW: ${{ matrix.envinfo.name }}
@@ -28,6 +28,12 @@ jobs:
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         body-includes:  ${{ github.event.client_payload.sha }} and ${{ matrix.envinfo.os }}
+
+    - name: if
+      if: ${{ steps.fc.outputs.comment-id }}
+      shell: bash
+      run: |
+        echo "::set-env name=TEST::${{ steps.fc.outputs.comment-id }}"
 
     - name: Update comment
       if: ${{ steps.fc.outputs.comment-id }}
