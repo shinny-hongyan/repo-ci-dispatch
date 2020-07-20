@@ -53,21 +53,11 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch-private
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: ${{ github.event.client_payload.pr_number }}
-        body-includes:  All CI workflow run
+        body-includes:  ci-linux
 
-    - name: Find Comment
+    - name: echo Comment
       if: always()
       run: echo ${{ steps.fc.outputs.comment-id }}
-
-    - name: Create comment
-      if: success() and ${{ github.event.client_payload.pr }} and not ${{ steps.fc.outputs.comment-id }}
-      uses: peter-evans/commit-comment@v1
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        sha: ${{ github.event.client_payload.pr }}
-        body: ci-linux-py3.8 run success
-        position: ${{ steps.fc.outputs.comment-id }}
 
     - name: Update comment
       if: success() and ${{ github.event.client_payload.pr }} and ${{ steps.fc.outputs.comment-id }}
