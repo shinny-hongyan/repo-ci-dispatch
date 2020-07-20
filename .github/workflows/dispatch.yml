@@ -10,9 +10,9 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-
-
-    - uses: convictional/trigger-workflow-and-wait
+    
+    - name: Dump GitHub context
+      uses: convictional/trigger-workflow-and-wait
       with:
         owner: shinny-hongyan
         repo: repo-ci-dispatch
