@@ -57,7 +57,7 @@ jobs:
         body-includes:  This is the ci result
 
     - name: echo
-      if: always()
+      if: always() 
       run: echo ${{ steps.fc.outputs.comment-id }}
 
     - name: Update comment
