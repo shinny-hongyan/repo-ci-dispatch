@@ -27,6 +27,7 @@ jobs:
       id: fc
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        issue-number: 1
         body-includes:  ${{ github.event.client_payload.sha }} and ${{ matrix.envinfo.os }}
 
     - name: if
