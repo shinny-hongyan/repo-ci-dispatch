@@ -30,8 +30,8 @@ jobs:
     steps:
     - name: Setup Node.js 12.x
       shell: bash
-        run: |
-          touch ${{ matrix.envinfo.name }}.txt
+      run: |
+        touch ${{ matrix.envinfo.name }}.txt
 
 
     - name: Upload success flag file
