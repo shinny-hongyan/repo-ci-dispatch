@@ -1,4 +1,4 @@
-name: run_linux
+name: run_win
 
 on:
   repository_dispatch:
