@@ -53,7 +53,7 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch-private
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: ${{ github.event.client_payload.pr_number }}
-        body-includes:  Some additional info
+        body-includes:  All CI workflow run
 
     - name: Create comment
       if: success() and ${{ github.event.client_payload.pr }} and not ${{ steps.fc.outputs.comment-id }}
@@ -74,5 +74,4 @@ jobs:
         issue-number: ${{ github.event.client_payload.pr_number }}
         comment-id: ${{ steps.fc.outputs.comment-id }}
         body: |
-          **Edit:** Some additional info
-        reactions: eyes
+          **ci-linux:** [ √ ] Run ci success
