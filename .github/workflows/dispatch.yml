@@ -2,7 +2,7 @@ name: Dispatch
 
 on:
   repository_dispatch:
-    types: [ci-run]
+    types: [ci-run-*]
 
 jobs:
   test:
