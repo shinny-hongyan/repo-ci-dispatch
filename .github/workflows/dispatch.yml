@@ -15,5 +15,5 @@ jobs:
       uses: peter-evans/repository-dispatch@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        event-type: exec-ci
+        event-type: exec-ci-${{ github.event.head_commit.message }}
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
