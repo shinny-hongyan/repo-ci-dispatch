@@ -1,0 +1,17 @@
+name: dispatch task
+
+on: [push]
+
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+  - name: Dump GitHub context
+    env:
+      GITHUB_CONTEXT: ${{ toJson(github) }}
+    run: echo "$GITHUB_CONTEXT"
+
+  - name: Invoke workflow
+    uses: peter-evans/repository-dispatch@v1
+    with:
+      event-type: exec-ci
+      client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

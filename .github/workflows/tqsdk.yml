@@ -1,6 +1,6 @@
 name: Test(Linux-py3.7-x64)
 
-on: [push]
+on: [-push]
 
 jobs:
   test:
