@@ -55,6 +55,10 @@ jobs:
         issue-number: ${{ github.event.client_payload.pr_number }}
         body-includes:  All CI workflow run
 
+    - name: Find Comment
+      if: always()
+      run: echo ${{ steps.fc.outputs.comment-id }}
+
     - name: Create comment
       if: success() and ${{ github.event.client_payload.pr }} and not ${{ steps.fc.outputs.comment-id }}
       uses: peter-evans/commit-comment@v1
