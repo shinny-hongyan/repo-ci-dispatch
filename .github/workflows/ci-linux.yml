@@ -31,10 +31,14 @@ jobs:
         body-includes:  ${{ github.event.client_payload.sha }} and ${{ matrix.envinfo.os }}
 
     - name: if
-      if: ${{ steps.fc.outputs.comment-id }}
       shell: bash
       run: |
-        echo "::set-env name=TEST::${{ steps.fc.outputs.comment-id }}"
+        echo "::set-env name=TEST::#${{ steps.fc.outputs.comment-id }}#"
+
+    - name: if
+      shell: bash
+      run: |
+        echo "aa"
 
     - name: Update comment
       if: ${{ steps.fc.outputs.comment-id }}
