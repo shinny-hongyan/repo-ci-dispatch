@@ -42,6 +42,7 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch
         ref: ${{ github.sha }}
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        onlyFirstCheckSuite: true
 
     - name: Find Comment
       if: success() && github.event_name == 'pull_request'
