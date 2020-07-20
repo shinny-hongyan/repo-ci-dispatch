@@ -43,6 +43,7 @@ jobs:
 
     - name: echo job status
       run: |
+        echo ${{ github.event.client_payload.pr_flag }}
         echo ${{ job.status }}
 
     - name: Find Comment
