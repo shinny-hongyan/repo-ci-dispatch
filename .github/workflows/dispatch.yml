@@ -1,6 +1,8 @@
 name: Dispatch
 
-on: [push]
+on:
+  repository_dispatch:
+    types: [ci-run]
 
 jobs:
   test:
@@ -35,31 +37,6 @@ jobs:
         echo "::set-env name=COMMIT_MSG::#${{ github.event.pull_request.number }}-${{ github.event.pull_request.title }}"
         echo "::set-env name=PR_FLAG::true"
 
-    - name: Find Comment
-      if: github.event_name == 'pull_request'
-      uses: peter-evans/find-comment@v1
-      id: fc
-      with:
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        issue-number: ${{ github.event.pull_request.number }}
-        body-includes:  'This is the ci result'
-
-    - name: echo job status
-      run: |
-        echo ${{ steps.fc.outputs.comment-id }}
-
-    - name: Create comment
-      if: steps.fc.outputs.comment-id == '' && github.event_name == 'pull_request' && matrix.external_ci == 'ci-linux'
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        issue-number: ${{ github.event.pull_request.number }}
-        comment-id: ${{ steps.fc.outputs.comment-id }}
-        body: |
-          This is the ci result, see: https://github.com/shinny-hongyan/repo-ci-dispatch/actions :sparkles:
-
     - name: Invoke workflow
       uses: peter-evans/repository-dispatch@v1 
       with:
@@ -83,4 +60,24 @@ jobs:
         ref: ${{ github.sha }}
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
 
+    - name: Find Comment
+      if: success() && github.event_name == 'pull_request'
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body-includes:  'This is the ci result'
 
+    - name: Add comment for ci success
+      if: success() && steps.fc.outputs.comment-id == '' && github.event_name == 'pull_request'
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        body: |
+          All CI run success!
+        reactions: '+1'
