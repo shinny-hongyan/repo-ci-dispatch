@@ -10,15 +10,10 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-    
-    - name: Dump GitHub context
-      uses: convictional/trigger-workflow-and-wait
-      with:
-        owner: shinny-hongyan
-        repo: repo-ci-dispatch
-        github_token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        wait_interval: 60
-        event-type: exec-ci-${{ github.event.head_commit.message }}
 
     - name: Invoke workflow
-      run: echo "run all success"
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        event-type: exec-ci-${{ github.event.head_commit.message }}
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
