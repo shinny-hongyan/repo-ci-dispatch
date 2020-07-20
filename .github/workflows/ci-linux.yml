@@ -44,6 +44,7 @@ jobs:
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        issue-number: 1
         comment-id: ${{ steps.fc.outputs.comment-id }}
         body: |
           - **[ √ ] ${{ matrix.envinfo.os }}:** Run ci success
