@@ -11,9 +11,14 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
 
-    - name: Invoke workflow
-      uses: peter-evans/repository-dispatch@v1
+
+    - uses: convictional/trigger-workflow-and-wait
       with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        owner: shinny-hongyan
+        repo: repo-ci-dispatch
+        github_token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        wait_interval: 60
         event-type: exec-ci-${{ github.event.head_commit.message }}
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
+    - name: Invoke workflow
+      run: echo "run all success"

@@ -2,14 +2,14 @@ name: run_linux
 
 on:
   repository_dispatch:
-    types: [aexec-ci-*]
+    types: [exec-ci-*]
 
 jobs:
   test:
     strategy:
       matrix:
         envinfo:
-          - { name: 'linux-3.6-x64', os: windows-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
+          - { name: 'windows-3.6-x64', os: windows-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
 
     env:
         GITHUB_WORKFLOW: ${{ matrix.envinfo.name }}
