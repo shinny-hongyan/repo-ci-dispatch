@@ -1,7 +1,3 @@
-name: dispatch task
-
-on: [push]
-
 jobs:
   test:
     strategy:
@@ -71,8 +67,16 @@ jobs:
         "pr": "${{ github.event.pull_request.head.sha }}", 
         "pr_number": "${{ github.event.pull_request.number }}" }'
 
+
+  summary:
+    name: summary CI result
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
     - uses: jitterbit/await-check-suites@v1
       with:
         repository: shinny-hongyan/repo-ci-dispatch
         ref: ${{ github.sha }}
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
+
+
