@@ -44,7 +44,6 @@ jobs:
     - name: echo job status
       run: |
         echo ${{ job.status }}
-        exit 1
 
     - name: Find Comment
       uses: peter-evans/find-comment@v1
