@@ -28,12 +28,20 @@ jobs:
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: 1
-        body-includes:  'This is the ci result'
+        body-includes:  '[ √ ] linux-3.6-x64'
 
     - name: if
       shell: bash
       run: |
         echo "::set-env name=TEST::#${{ steps.fc.outputs.comment-id }}#"
+
+    - name: Find Comment success
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        issue-number: 1
+        body-includes:  'This is the ci result'
 
     - name: if
       shell: bash
@@ -41,6 +49,7 @@ jobs:
         echo "aa"
 
     - name: Update comment
+      if: steps.fc.outputs.comment-id == ''
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
