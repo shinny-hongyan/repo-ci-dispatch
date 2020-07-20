@@ -21,7 +21,9 @@ jobs:
 
     steps:
     - name: echo result
-      run: echo "halo"
+      run: |
+      echo "halo"
+      exit 1
 
   summary:
     name: summary CI result
