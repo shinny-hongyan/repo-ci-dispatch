@@ -40,7 +40,7 @@ jobs:
       run: |
         echo "aa"
 
-    - name: Update comment 
+    - name: Update comment
       if: steps.fc.outputs.comment-id == ''
       uses: peter-evans/create-or-update-comment@v1
       with:
