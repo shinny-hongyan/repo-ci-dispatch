@@ -60,7 +60,7 @@ jobs:
       run: echo ${{ steps.fc.outputs}}
 
     - name: Create comment
-      if: success() and ${{ github.event.client_payload.pr }} and ${{ steps.fc.outputs.comment-id }}
+      if: success() and ${{ github.event.client_payload.pr }} and not ${{ steps.fc.outputs.comment-id }}
       uses: peter-evans/commit-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
@@ -69,11 +69,11 @@ jobs:
         body: ci-linux-py3.8 run success
         position: ${{ steps.fc.outputs.comment-id }}
 
-      - name: Update comment
-        if: success() and ${{ github.event.client_payload.pr }} and ${{ steps.fc.outputs.comment-id }}
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          body: |
-            **Edit:** Some additional info
-          reactions: eyes
+    - name: Update comment
+      if: success() and ${{ github.event.client_payload.pr }} and ${{ steps.fc.outputs.comment-id }}
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        body: |
+          **Edit:** Some additional info
+        reactions: eyes
