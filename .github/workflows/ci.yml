@@ -53,9 +53,9 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch-private
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: ${{ github.event.client_payload.pr_number }}
-        body-includes:  ci-linux
+        body-includes:  This is the ci result
 
-    - name: echo Comment
+    - name: echo
       if: always()
       run: echo ${{ steps.fc.outputs.comment-id }}
 
