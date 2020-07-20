@@ -28,7 +28,7 @@ jobs:
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: 1
-        body-includes:  ${{ github.event.client_payload.sha }} and ${{ matrix.envinfo.os }}
+        body-includes:  'This is the ci result' and 'linux-3.6-x64'
 
     - name: if
       shell: bash
@@ -47,4 +47,4 @@ jobs:
         issue-number: 1
         comment-id: ${{ steps.fc.outputs.comment-id }}
         body: |
-          - **[ √ ] ${{ matrix.envinfo.os }}:** Run ci success
+          - **[ √ ] linux-3.6-x64:** Run ci success
