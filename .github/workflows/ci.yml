@@ -46,7 +46,7 @@ jobs:
         echo ${{ job.status }}
 
     - name: Find Comment
-      if: always()
+      if: always() and ${{ github.event.client_payload.pr_flag }}
       uses: peter-evans/find-comment@v1
       id: fc
       with:
