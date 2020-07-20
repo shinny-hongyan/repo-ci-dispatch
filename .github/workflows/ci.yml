@@ -73,6 +73,9 @@ jobs:
       if: success() and ${{ github.event.client_payload.pr }} and ${{ steps.fc.outputs.comment-id }}
       uses: peter-evans/create-or-update-comment@v1
       with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        issue-number: ${{ github.event.client_payload.pr_number }}
         comment-id: ${{ steps.fc.outputs.comment-id }}
         body: |
           **Edit:** Some additional info
