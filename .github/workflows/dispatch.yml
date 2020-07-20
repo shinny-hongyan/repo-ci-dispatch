@@ -28,14 +28,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: failed
-        if: failed()
-        shell: bash
-        run: |
-          echo "failed"
-
-      - name: success
-        if: success()
-        shell: bash
-        run: |
-          echo "success"
+      - name: Dump GitHub context
+        if: always()
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
