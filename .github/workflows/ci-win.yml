@@ -45,12 +45,23 @@ jobs:
       run: |
         echo ${{ job.status }}
 
-    - name: Create commit comment
-      if: success() and ${{ github.event.client_payload.pr }}
-      uses: peter-evans/commit-comment@v1
+    - name: Find Comment
+      if: always() and ${{ github.event.client_payload.pr_flag }}
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        issue-number: ${{ github.event.client_payload.pr_number }}
+        body-includes:  'This is the ci result'
+
+    - name: Update comment
+      if: failed() and ${{ github.event.client_payload.pr }} and ${{ steps.fc.outputs.comment-id }}
+      uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
-        sha: ${{ github.event.client_payload.pr }}
-        body: ${{ github.event.client_payload.title }} run ci success on win platform
-        position: 1
+        issue-number: ${{ github.event.client_payload.pr_number }}
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        body: |
+          - **[ × ] ci-win:** Run ci failed
