@@ -1,6 +1,8 @@
 name: dispatch task
 
-on: [push]
+on:
+  repository_dispatch:
+    types: [rrrrrrrrrrrrrrci-win-*]
 
 jobs:
   test:

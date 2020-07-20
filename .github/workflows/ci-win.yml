@@ -2,7 +2,7 @@ name: run_win
 
 on:
   repository_dispatch:
-    types: [exec-ci-*]
+    types: [ci-win-*]
 
 jobs:
   test:
@@ -21,19 +21,3 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-
-    - name: Find Comment
-      uses: peter-evans/find-comment@v1
-      id: fc
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        body-includes:  ${{ github.event.client_payload.sha }} and ${{ matrix.envinfo.os }}
-
-    - name: Update comment
-      if: ${{ steps.fc.outputs.comment-id }}
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        comment-id: ${{ steps.fc.outputs.comment-id }}
-        body: |
-          - **[ √ ] ${{ matrix.envinfo.os }}:** Run ci success

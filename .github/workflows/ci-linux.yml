@@ -2,7 +2,7 @@ name: run_linux
 
 on:
   repository_dispatch:
-    types: [exec-ci*]
+    types: [ci-linux*]
 
 jobs:
   test:
@@ -21,31 +21,3 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
-
-    - name: Find Comment
-      uses: peter-evans/find-comment@v1
-      id: fc
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        issue-number: 1
-        body-includes:  '[ √ ] linux-3.6-x64-'${{ github.event.client_payload.sha }}
-
-    - name: if
-      shell: bash
-      run: |
-        echo "::set-env name=TEST::#${{ steps.fc.outputs.comment-id }}#"
-
-    - name: if
-      shell: bash
-      run: |
-        echo "aa"
-
-    - name: Update comment
-      if: steps.fc.outputs.comment-id == ''
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        issue-number: 1
-        comment-id: ${{ steps.fc.outputs.comment-id }}
-        body: |
-          - '[ √ ] linux-3.6-x64-'${{ github.event.client_payload.sha }}
