@@ -1,3 +1,7 @@
+name: Dispatch
+
+on: [push]
+
 jobs:
   test:
     strategy:
