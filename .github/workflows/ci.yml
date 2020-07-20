@@ -46,6 +46,16 @@ jobs:
         echo ${{ job.status }}
         exit 1
 
+    - name: Find Comment
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        issue-number: 1
+        comment-author: peter-evans
+        body-includes:  ci-linux-py3.8 run
+
+    - run: echo ${{ steps.fc.outputs.comment-id }}
+
     - name: Create commit comment
       if: success() and ${{ github.event.client_payload.pr }}
       uses: peter-evans/commit-comment@v1
@@ -53,5 +63,5 @@ jobs:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
         sha: ${{ github.event.client_payload.pr }}
-        body: ${{ github.event.client_payload.title }} run ci success on linux platform
-        position: 1
+        body: ci-linux-py3.8 run success
+        position: ${{ steps.fc.outputs.comment-id }}
