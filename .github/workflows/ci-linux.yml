@@ -28,7 +28,7 @@ jobs:
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: 1
-        body-includes:  'This is the ci result' and 'linux-3.6-x64'
+        body-includes:  'This is the ci result'
 
     - name: if
       shell: bash
