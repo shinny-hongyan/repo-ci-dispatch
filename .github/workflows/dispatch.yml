@@ -11,7 +11,8 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: echo "$GITHUB_CONTEXT"
 
-    - uses: shinny-hongyan/trigger-workflow-and-wait
+    - name: Dump GitHub context
+      uses: shinny-hongyan/trigger-workflow-and-wait@master
       with:
         owner: shinny-hongyan
         repo: repo-ci-dispatch
