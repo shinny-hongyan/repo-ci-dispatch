@@ -41,7 +41,6 @@ jobs:
         echo "aa"
 
     - name: Update comment
-      if: ${{ steps.fc.outputs.comment-id }}
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}

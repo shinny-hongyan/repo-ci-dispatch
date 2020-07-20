@@ -2,7 +2,7 @@ name: run_linux
 
 on:
   repository_dispatch:
-    types: [exec-ci-*]
+    types: [aexec-ci-*]
 
 jobs:
   test:
