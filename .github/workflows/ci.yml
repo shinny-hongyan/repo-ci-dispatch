@@ -53,11 +53,7 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch-private
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         issue-number: ${{ github.event.client_payload.pr_number }}
-        body-includes:  ci-linux-py3.8 run
-
-    - name: echo find result
-      if: always()
-      run: echo ${{ steps.fc.outputs}}
+        body-includes:  Some additional info
 
     - name: Create comment
       if: success() and ${{ github.event.client_payload.pr }} and not ${{ steps.fc.outputs.comment-id }}
