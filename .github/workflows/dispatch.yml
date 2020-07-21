@@ -43,6 +43,9 @@ jobs:
         repository: shinny-hongyan/repo-ci-dispatch
         ref: ${{ github.sha }}
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        waitForACheckSuite: true
+        timeoutSeconds: 60
+        appSlugFilter: 'github-actions'
         onlyFirstCheckSuite: true
 
     - name: Find Comment
