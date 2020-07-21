@@ -21,13 +21,13 @@ jobs:
         exit
 
     - name: Log failed info
-      if: ${{ failure() }}
+      if: failure()
       run: |
         echo ${{ github.run_id }} > ${{ matrix.envinfo.os }}.flag.txt
         cat ${{ matrix.envinfo.os }}.flag.txt
 
     - name: Upload a file when jobs failed
-      if: ${{ failure() }}
+      if: failure()
       uses: actions/upload-artifact@v1
       with:
         name: ci-result
