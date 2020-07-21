@@ -17,39 +17,9 @@ jobs:
     runs-on: ${{ matrix.envinfo.os }}
 
     steps:
-    - name: Format ci flag file name
-      shell: bash
-      run: |
-        echo "::set-env name=FLAG_FILE::$(echo ${{ github.event.client_payload.sha }})-ci-linux"
-
-    - uses: tuler/s3-check-action@master
-      id: check
-      env:
-        FILE: 'dist/tqsdk-python/CI_FLAG_FILE/'${{ env.FLAG_FILE }}
-        AWS_S3_BUCKET: ${{ secrets.BUCKET_NAME }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
-
-    - run: echo "Do your thing"
-      if: steps.check.outputs.exists == 'false'
-
-    - run: echo "Write a file to S3 bucket with name \${GITHUB_SHA}"
-      if: steps.check.outputs.exists == 'false'
-
     - name: Dump GitHub context
       env:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
         touch ${{ github.event.client_payload.sha }}-ci-win
         echo "$GITHUB_CONTEXT"
-
-    - name: Publish flag file if success
-      uses: jakejarvis/s3-sync-action@master
-      env:
-        AWS_S3_BUCKET: ${{ secrets.BUCKET_NAME }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: ${{ secrets.AWS_REGION }}
-        SOURCE_DIR: ${{ env.FLAG_FILE }}
-        DEST_DIR: 'dist/tqsdk-python/CI_FLAG_FILE/'
