@@ -17,7 +17,7 @@ jobs:
         issue-number: ${{ github.event.client_payload.pr_number }}
         comment-id: ${{ github.event.client_payload.pr_number.comment_id }}
         body: |
-          Workflow url: 'https://github.com/shinny-hongyan/repo-ci-dispatch/actions/runs/'${{ github.run_id }}
+          Workflow url: https://github.com/shinny-hongyan/repo-ci-dispatch/actions/runs/${{ github.run_id }}
 
   run:
     needs: setup
