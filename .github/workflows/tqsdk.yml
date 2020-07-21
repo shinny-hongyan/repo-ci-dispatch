@@ -42,7 +42,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Add comment show success
-      if: github.event.client_payload.pr_flag == 'true'
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
