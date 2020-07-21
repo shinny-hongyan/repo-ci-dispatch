@@ -47,13 +47,22 @@ jobs:
     needs: run
     runs-on: ubuntu-latest
     steps:
+    - name: Find Comment
+      uses: peter-evans/find-comment@v1
+      id: fc
+      with:
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        issue-number: ${{ github.event.client_payload.pr_number }}
+        body-includes:  https://github.com/shinny-hongyan/repo-ci-dispatch/actions/runs/${{ github.run_id }}
+
     - name: Add comment show success
       uses: peter-evans/create-or-update-comment@v1
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
         issue-number: ${{ github.event.client_payload.pr_number }}
-        comment-id: ${{ env.COMMENT_ID }}
+        comment-id: ${{ steps.fc.outputs.comment-id }}
         body: |
           All CI run success!
         reactions: '+1'
