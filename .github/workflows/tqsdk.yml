@@ -8,7 +8,7 @@ jobs:
       matrix:
         envinfo:
           - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
-          - { name: 'linux-3.8-x64', os: ubuntu-latest, python-version: 3.8.x, python-arch: x64, TZ: 'Asia/Shanghai' }
+          - { name: 'windows-3.6-x64', os: windows-latest, python-version: 3.6.x, python-arch: x64, TZ: 'CST-8' }
 
     runs-on: ${{ matrix.envinfo.os }}
 
