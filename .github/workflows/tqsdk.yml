@@ -15,7 +15,7 @@ jobs:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
         issue-number: ${{ github.event.client_payload.pr_number }}
-        comment-id: ${{ github.event.client_payload.pr_number.comment_id }}
+        comment-id: ${{ github.event.client_payload.comment_id }}
         body: |
           Workflow url: https://github.com/shinny-hongyan/repo-ci-dispatch/actions/runs/${{ github.run_id }}
 
@@ -47,7 +47,7 @@ jobs:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
         issue-number: ${{ github.event.client_payload.pr_number }}
-        comment-id: ${{ github.event.client_payload.pr_number.comment_id }}
+        comment-id: ${{ github.event.client_payload.comment_id }}
         body: |
           All CI run success!
         reactions: '+1'
