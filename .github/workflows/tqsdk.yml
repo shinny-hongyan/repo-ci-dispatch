@@ -1,9 +1,26 @@
 name: run_linux
 
-on: [push]
+on:
+  repository_dispatch:
+    types: [run-ci-*]
 
 jobs:
-  test:
+  setup:
+    name: log the workflow url in src repo
+    runs-on: ubuntu-latest
+    steps:
+    - name: Add comment show workflow url
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        issue-number: ${{ github.event.client_payload.pr_number }}
+        comment-id: ${{ github.event.client_payload.pr_number.comment_id }}
+        body: |
+          Workflow url: 'https://github.com/shinny-hongyan/repo-ci-dispatch/actions/runs/'${{ github.run_id }}
+
+  run:
+    needs: setup
     strategy:
       matrix:
         envinfo:
@@ -18,35 +35,20 @@ jobs:
         GITHUB_CONTEXT: ${{ toJson(github) }}
       run: |
         echo "$GITHUB_CONTEXT"
-        exit 1
-
-    - name: Log failed info
-      if: failure()
-      run: |
-        echo ${{ github.run_id }} > ${{ matrix.envinfo.os }}.flag.txt
-        cat ${{ matrix.envinfo.os }}.flag.txt
-
-    - name: Upload a file when jobs failed
-      if: failure()
-      uses: actions/upload-artifact@v1
-      with:
-        name: ci-result
-        path: ${{ matrix.envinfo.os }}.flag.txt
 
   summary:
     name: summary CI result
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Download ci-result
-      if: always()
-      uses: actions/download-artifact@v1
+    - name: Add comment show success
+      if: github.event.client_payload.pr_flag == 'true'
+      uses: peter-evans/create-or-update-comment@v1
       with:
-        name: ci-result
-
-    - name: Print the final result
-      if: always()
-      shell: bash
-      run: |
-        value=`ls -lrt ci-result`
-        echo The result is $value
+        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        repository: shinny-hongyan/repo-ci-dispatch-private
+        issue-number: ${{ github.event.client_payload.pr_number }}
+        comment-id: ${{ github.event.client_payload.pr_number.comment_id }}
+        body: |
+          All CI run success!
+        reactions: '+1'
