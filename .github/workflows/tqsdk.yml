@@ -64,5 +64,5 @@ jobs:
         issue-number: ${{ github.event.client_payload.pr_number }}
         comment-id: ${{ steps.fc.outputs.comment-id }}
         body: |
-          All CI run success!
+          ci ${{ github.run_id }} run success!
         reactions: '+1'
