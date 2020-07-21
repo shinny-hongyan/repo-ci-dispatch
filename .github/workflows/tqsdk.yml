@@ -38,7 +38,7 @@ jobs:
 
   summary:
     name: summary CI result
-    needs: test
+    needs: run
     runs-on: ubuntu-latest
     steps:
     - name: Add comment show success
