@@ -11,6 +11,7 @@ jobs:
     steps:
     - name: Add comment show workflow url
       uses: peter-evans/create-or-update-comment@v1
+      id: comment
       with:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
@@ -18,6 +19,11 @@ jobs:
         comment-id: ${{ github.event.client_payload.comment_id }}
         body: |
           Workflow url: https://github.com/shinny-hongyan/repo-ci-dispatch/actions/runs/${{ github.run_id }}
+
+    - name: echo comment-id
+      if: steps.comment.outputs.comment-id != ''
+      run: |
+        echo "::set-env name=COMMENT_ID::${{ steps.comment.outputs.comment-id }}"
 
   run:
     needs: setup
