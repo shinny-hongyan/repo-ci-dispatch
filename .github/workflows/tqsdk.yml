@@ -1,0 +1,50 @@
+name: run_linux
+
+on: [push]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        envinfo:
+          - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
+          - { name: 'linux-3.8-x64', os: ubuntu-latest, python-version: 3.8.x, python-arch: x64, TZ: 'Asia/Shanghai' }
+
+    runs-on: ${{ matrix.envinfo.os }}
+
+    steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "$GITHUB_CONTEXT"
+        exit
+
+    - name: Log failed info
+      if: failed()
+      run: |
+        echo ${{ github.run_id }} > ${{ matrix.envinfo.os }}.flag.txt
+        cat ${{ matrix.envinfo.os }}.flag.txt
+
+    - name: Upload a file when jobs failed
+      if: failed()
+      uses: actions/upload-artifact@v1
+      with:
+        name: ci-result
+        path: ${{ matrix.envinfo.os }}.flag.txt
+
+  summary:
+    name: summary CI result
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download ci-result
+      uses: actions/download-artifact@v1
+      with:
+        name: ci-result
+
+    - name: Print the final result
+      shell: bash
+      run: |
+        value=`ls -lrt ci-result`
+        echo The result is $value
