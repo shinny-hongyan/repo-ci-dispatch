@@ -53,7 +53,7 @@ jobs:
         token: ${{ secrets.GH_PERSONAL_TOKEN }}
         repository: shinny-hongyan/repo-ci-dispatch-private
         issue-number: ${{ github.event.client_payload.pr_number }}
-        comment-id: ${{ github.event.client_payload.comment_id }}
+        comment-id: ${{ env.COMMENT_ID }}
         body: |
           All CI run success!
         reactions: '+1'
