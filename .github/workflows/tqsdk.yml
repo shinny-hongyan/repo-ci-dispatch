@@ -23,7 +23,7 @@ jobs:
     - name: Setup AWS S3 dist path
       shell: bash
       run: |
-        echo "::set-env name=DIST_DIR::dist/tqsdk-python-private/$(echo ${{ github.event.client_payload.ref }}#refs/heads/)/$(date -d today +%Y%m%d)_$(echo ${{ github.event.client_payload.sha }})/"
+        echo "::set-env name=DIST_DIR::dist/tqsdk-python-private/$(echo ${{ github.event.client_payload.ref#refs/heads/ }})/$(date -d today +%Y%m%d)_$(echo ${{ github.event.client_payload.sha }})/"
         echo "::set-env name=DOC_DIR::docs/tqsdk-python/$(echo ${{ github.event.client_payload.ref }}#refs/heads/)/"
 
     - name: echo comment-id
