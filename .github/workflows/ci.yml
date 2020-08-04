@@ -38,7 +38,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: homework
-        path: dist/job2.txt
+        path: dist/*.txt
 
   job_3:
     name: Display results
