@@ -1,89 +1,47 @@
-name: run_linux
+name: Share data between jobs
 
-on:
-  repository_dispatch:
-    types: [aci-linux-*]
+on: [push]
 
 jobs:
-  test:
-    strategy:
-      matrix:
-        envinfo:
-          - { name: 'linux-3.6-x64', os: ubuntu-latest, python-version: 3.6.x, python-arch: x64, TZ: 'Asia/Shanghai' }
-
-    env:
-        GITHUB_WORKFLOW: ${{ matrix.envinfo.name }}
-
-    runs-on: ${{ matrix.envinfo.os }}
-
+  job_1:
+    name: Add 3 and 7
+    runs-on: ubuntu-latest
     steps:
-    - name: exec shell
+      - shell: bash
+        run: |
+          touch job1.txt
+      - name: Upload math result for job 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: homework
+          path: job1.txt
+
+  job_2:
+    name: Multiply by 9
+    needs: job_1
+    runs-on: windows-latest
+    steps:
+    - shell: bash
       run: |
-        pwd
-        ls -lrt
-        echo "${GITHUB_WORKFLOW}"
-
-    - name: Checkout
-      uses: actions/checkout@v2
+        touch job2.txt
+    - name: Upload math result for job 1
+      uses: actions/upload-artifact@v2
       with:
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        ref: ${{ github.event.client_payload.ref }}
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
+        name: homework
+        path: job2.txt
 
-    - name: exec shell
-      run: |
-        pwd
-        ls -lrt
-        echo ${{ github.event.client_payload.ref }}
+  job_3:
+    name: Display results
+    needs: job_2
+    runs-on: macOS-latest
+    steps:
+      - name: Download math result for job 2
+        uses: actions/download-artifact@v2
+        with:
+          name: homework
 
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-
-    - name: Dump job context
-      env:
-        JOB_CONTEXT: ${{ toJson(job) }}
-      run: echo "$JOB_CONTEXT"
-    - name: Dump steps context
-      env:
-        STEPS_CONTEXT: ${{ toJson(steps) }}
-      run: echo "$STEPS_CONTEXT"
-    - name: Dump runner context
-      env:
-        RUNNER_CONTEXT: ${{ toJson(runner) }}
-      run: echo "$RUNNER_CONTEXT"
-    - name: Dump strategy context
-      env:
-        STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-      run: echo "$STRATEGY_CONTEXT"
-    - name: Dump matrix context
-      env:
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
-      run: echo "$MATRIX_CONTEXT"
-
-    - name: echo job status
-      run: |
-        echo ${{ github.event.client_payload.pr_flag }}
-        echo ${{ github.event.client_payload.pr_number }}
-
-    - name: Find Comment
-      if: always() and ${{ github.event.client_payload.pr_flag }}
-      uses: peter-evans/find-comment@v1
-      id: fc
-      with:
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        issue-number: ${{ github.event.client_payload.pr_number }}
-        body-includes:  'This is the ci result'
-
-    - name: Update comment
-      if: success() and ${{ github.event.client_payload.pr_flag }} == 'true' and ${{ steps.fc.outputs.comment-id }}
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        token: ${{ secrets.GH_PERSONAL_TOKEN }}
-        repository: shinny-hongyan/repo-ci-dispatch-private
-        issue-number: ${{ github.event.client_payload.pr_number }}
-        comment-id: ${{ steps.fc.outputs.comment-id }}
-        body: |
-          - **[ √ ] ci-linux:** Run ci success
+      - name: Print the final result
+        shell: bash
+        run: |
+          touch job3.txt
+          ls -lrt
