@@ -5,16 +5,22 @@ on: [push]
 jobs:
   job_1:
     name: Add 3 and 7
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        envinfo:
+          - { name: 'windows-3.6-x64', os: windows-latest, bdist-platform: 'win_amd64' }
+          - { name: 'windows-3.6-x86', os: windows-latest, bdist-platform: 'win32' }
+
+    runs-on: ${{ matrix.envinfo.os }}
     steps:
       - shell: bash
         run: |
-          touch job1.txt
+          touch ${{ matrix.envinfo.bdist-platform }}.txt
       - name: Upload math result for job 1
         uses: actions/upload-artifact@v2
         with:
           name: homework
-          path: job1.txt
+          path: ${{ matrix.envinfo.bdist-platform }}.txt
 
   job_2:
     name: Multiply by 9
